@@ -5,43 +5,62 @@ import OutputScn from './components/OutputScn';
 
 function App() {
   const [total, setTotal] = useState(0);
-  const [display, setDisplay] = useState(0);
+  const [answer, setAnswer] = useState(0);
+  const [display, setDisplay] = useState('0');
 
+  const btnsRow1 = [
+    ['(', 'parenthesis'],
+    [')', 'parenthesis'],
+    ['%', 'percentage'],
+    ['AC', 'clear'],
+  ];
+  const btnsRow2 = [
+    [7, 'number'],
+    [8, 'number'],
+    [9, 'number'],
+    ['/', 'operator'],
+  ];
+  const btnsRow3 = [
+    [4, 'number'],
+    [5, 'number'],
+    [6, 'number'],
+    ['x', 'operator'],
+  ];
+  const btnsRow4 = [
+    [1, 'number'],
+    [2, 'number'],
+    [3, 'number'],
+    ['-', 'operator'],
+  ];
+  const btnsRow5 = [
+    [0, 'number'],
+    ['.', 'decimal'],
+    ['=', 'equals'],
+    ['+', 'operator'],
+  ];
+  const btnRows = [btnsRow1, btnsRow2, btnsRow3, btnsRow4, btnsRow5];
   return (
     <div className="App">
       <div className="CalcContainer">
         <OutputScn display={display} />
+
         <div className="btn-container">
-          <div className="btn-row">
-            <CalcButton icon="(" setTotal={setTotal} setDisplay={setDisplay} />
-            <CalcButton icon=")" setTotal={setTotal} setDisplay={setDisplay} />
-            <CalcButton icon="%" setTotal={setTotal} setDisplay={setDisplay} />
-            <CalcButton icon="AC" setTotal={setTotal} setDisplay={setDisplay} />
-          </div>
-          <div className="btn-row">
-            <CalcButton icon="7" setTotal={setTotal} setDisplay={setDisplay} />
-            <CalcButton icon="8" setTotal={setTotal} setDisplay={setDisplay} />
-            <CalcButton icon="9" setTotal={setTotal} setDisplay={setDisplay} />
-            <CalcButton icon="+" setTotal={setTotal} setDisplay={setDisplay} />
-          </div>
-          <div className="btn-row">
-            <CalcButton icon="4" setTotal={setTotal} setDisplay={setDisplay} />
-            <CalcButton icon="5" setTotal={setTotal} setDisplay={setDisplay} />
-            <CalcButton icon="6" setTotal={setTotal} setDisplay={setDisplay} />
-            <CalcButton icon="x" setTotal={setTotal} setDisplay={setDisplay} />
-          </div>
-          <div className="btn-row">
-            <CalcButton icon="1" setTotal={setTotal} setDisplay={setDisplay} />
-            <CalcButton icon="2" setTotal={setTotal} setDisplay={setDisplay} />
-            <CalcButton icon="3" setTotal={setTotal} setDisplay={setDisplay} />
-            <CalcButton icon="-" setTotal={setTotal} setDisplay={setDisplay} />
-          </div>
-          <div className="btn-row">
-            <CalcButton icon="0" setTotal={setTotal} setDisplay={setDisplay} />
-            <CalcButton icon="." setTotal={setTotal} setDisplay={setDisplay} />
-            <CalcButton icon="=" setTotal={setTotal} setDisplay={setDisplay} />
-            <CalcButton icon="+" setTotal={setTotal} setDisplay={setDisplay} />
-          </div>
+          {btnRows.map((row) => (
+            <div className="btn-row">
+              {row.map((btns) => (
+                <CalcButton
+                  icon={btns[0]}
+                  type={btns[1]}
+                  display={display}
+                  answer={answer}
+                  total={total}
+                  setTotal={setTotal}
+                  setDisplay={setDisplay}
+                  setAnswer={setAnswer}
+                />
+              ))}
+            </div>
+          ))}
         </div>
       </div>
     </div>
