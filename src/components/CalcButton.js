@@ -9,8 +9,6 @@ export default function CalcButton({
   display,
   setDisplay,
   type,
-  answer,
-  setAnswer,
 }) {
   CalcButton.propTypes = {
     icon: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -19,8 +17,6 @@ export default function CalcButton({
     display: PropTypes.string.isRequired,
     setDisplay: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired,
-    answer: PropTypes.number.isRequired,
-    setAnswer: PropTypes.func.isRequired,
   };
 
   const clearFunc = (operator) => {
@@ -31,12 +27,10 @@ export default function CalcButton({
   const equalsFunc = () => {
     const evaluated = evaluate(display.replace('x', '*'));
     setDisplay(`${evaluated}`);
-    setAnswer(evaluated);
     setTotal(evaluated);
   };
 
   const btnClick = () => {
-    console.log(answer);
     // execute operator function
     if (type === 'operator') {
       setDisplay(`${display} ${icon}`);
@@ -48,10 +42,9 @@ export default function CalcButton({
       console.log('EQUALS BUTTON PRESSED');
       equalsFunc();
       // if a number is entered after the equals button, it will replace the last answer
-    } else if (type === 'number' && answer !== 0 && !/\s/g.test(display)) {
+    } else if (type === 'number' && total !== 0 && !/\s/g.test(display)) {
       console.log('ANSWER REPLACED');
       setDisplay(`${icon}`);
-      setAnswer(0);
       setTotal(0);
     } else if (display === '0') {
       setDisplay(`${icon}`);

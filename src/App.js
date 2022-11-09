@@ -5,7 +5,6 @@ import OutputScn from './components/OutputScn';
 
 function App() {
   const [total, setTotal] = useState(0);
-  const [answer, setAnswer] = useState(0);
   const [display, setDisplay] = useState('0');
 
   const btnsRow1 = [
@@ -52,11 +51,9 @@ function App() {
                   icon={btns[0]}
                   type={btns[1]}
                   display={display}
-                  answer={answer}
                   total={total}
                   setTotal={setTotal}
                   setDisplay={setDisplay}
-                  setAnswer={setAnswer}
                 />
               ))}
             </div>
