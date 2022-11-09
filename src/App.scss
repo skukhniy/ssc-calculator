@@ -17,6 +17,7 @@ body {
   height: 390px;
   background-color: purple;
   border-radius: 30px;
+  border-bottom: 0.5px solid black;
 }
 
 .OutputScn {
@@ -57,7 +58,8 @@ body {
 .calcBtn {
   width: 80px;
   height: 60px;
-  border: 0.5px solid black;
+  border-right: 0.5px solid black;
+  border-bottom: 0.5px solid black;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -69,9 +71,9 @@ body {
 
 .operator-color,
 .equals-color {
-  background-color: rgb(204, 132, 0);
+  background-color: orange;
   &:hover {
-    background-color: rgb(224, 160, 41);
+    background-color: rgb(247, 187, 77);
   }
 }
 
@@ -100,9 +102,9 @@ body {
   width: 161px;
 }
 .sign-change-color {
-  border-bottom-left-radius: 30px;
+  border-bottom-left-radius: 20px;
 }
 
 .equals-color {
-  border-bottom-right-radius: 30px;
+  border-bottom-right-radius: 20px;
 }

@@ -19,7 +19,7 @@ export default function CalcButton({
     type: PropTypes.string.isRequired,
   };
 
-  const clearFunc = (operator) => {
+  const clearFunc = () => {
     setTotal(0);
     setDisplay(`${0}`);
   };
@@ -88,6 +88,11 @@ export default function CalcButton({
       console.log('EQUALS BUTTON PRESSED');
       equalsFunc();
       // if a number is entered after the equals button, it will replace the last answer
+    } else if (type === 'parenthesis') {
+      console.log((icon === ')' && check.at(-1).includes('(')) || icon === '(');
+      if ((icon === ')' && check.at(-1).includes('(')) || icon === '(') {
+        setDisplay(`${display}${icon}`);
+      }
     } else if (type === 'decimal') {
       console.log('decimal');
       if (!check.at(-1).includes('.')) {
@@ -118,6 +123,7 @@ export default function CalcButton({
       setDisplay(`${display} ${icon}`);
       // make sure you cant add two decimal points in one number
     } else {
+      console.log('else');
       setDisplay(`${display}${icon}`);
     }
   };
