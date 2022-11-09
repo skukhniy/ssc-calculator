@@ -48,7 +48,7 @@ export default function CalcButton({
       console.log('EQUALS BUTTON PRESSED');
       equalsFunc();
       // if a number is entered after the equals button, it will replace the last answer
-    } else if (type === 'number' && answer !== 0) {
+    } else if (type === 'number' && answer !== 0 && !/\s/g.test(display)) {
       console.log('ANSWER REPLACED');
       setDisplay(`${icon}`);
       setAnswer(0);
