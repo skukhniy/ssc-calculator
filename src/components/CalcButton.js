@@ -32,6 +32,8 @@ export default function CalcButton({
   };
 
   const btnClick = () => {
+    console.log('btnclick');
+    console.log(type === 'decimal');
     // execute operator function
     if (type === 'operator') {
       setDisplay(`${display} ${icon}`);
@@ -43,6 +45,15 @@ export default function CalcButton({
       console.log('EQUALS BUTTON PRESSED');
       equalsFunc();
       // if a number is entered after the equals button, it will replace the last answer
+    } else if (type === 'decimal') {
+      const check = display.split(' ');
+      console.log('decimal');
+      console.log(check);
+      console.log(check.at(-1));
+      console.log(check.at(-1).includes('.'));
+      if (!check.at(-1).includes('.')) {
+        setDisplay(`${display}${icon}`);
+      }
     } else if (type === 'number' && total !== 0 && !/\s/g.test(display)) {
       console.log(total);
       console.log('ANSWER REPLACED');
@@ -62,8 +73,8 @@ export default function CalcButton({
       console.log(display.slice(-1));
       console.log('last input a operator');
       setDisplay(`${display} ${icon}`);
+      // make sure you cant add two decimal points in one number
     } else {
-      console.log('reached end of if loops');
       setDisplay(`${display}${icon}`);
     }
   };

@@ -13,7 +13,7 @@ body {
 
 .CalcContainer {
   width: 400px;
-  background-color: grey;
+  background-color: purple;
 }
 
 .btn-container {
@@ -33,18 +33,21 @@ body {
 .calcBtn {
   width: 75px;
   height: 50px;
-  background-color: blue;
+  background-color: pink;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  span {
+    font-size: x-large;
+  }
 }
 
 .OutputScn {
   width: 350px;
   height: 75px;
-  background-color: white;
-  color: black;
+  background-color: rgb(179, 23, 236);
+  color: white;
   display: flex;
   align-items: flex-end;
   justify-content: end;
