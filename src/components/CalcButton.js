@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes, { number } from 'prop-types';
-import { evaluate } from 'mathjs';
+import { e, evaluate } from 'mathjs';
 
 export default function CalcButton({
   icon,
@@ -25,7 +25,8 @@ export default function CalcButton({
   };
 
   const equalsFunc = () => {
-    const evaluated = evaluate(display.replace('x', '*'));
+    console.log(display);
+    const evaluated = evaluate(display.replaceAll('x', '*'));
     setDisplay(`${evaluated}`);
     setTotal(evaluated);
   };
@@ -43,19 +44,27 @@ export default function CalcButton({
       equalsFunc();
       // if a number is entered after the equals button, it will replace the last answer
     } else if (type === 'number' && total !== 0 && !/\s/g.test(display)) {
+      console.log(total);
       console.log('ANSWER REPLACED');
       setDisplay(`${icon}`);
       setTotal(0);
     } else if (display === '0') {
+      console.log('display === 0');
       setDisplay(`${icon}`);
       // check if the last input was a number, the add this number to the current display/total
     } else if (/\d/g.test(display.slice(-1))) {
       console.log(typeof number);
+      console.log(display.slice(-1));
       setDisplay(`${display}${icon}`);
-      setTotal();
       // check if last input was an operator
-    } else if (!/\d/g.test(display.slice(-1))) {
+    } else if (/[x+/-]/g.test(display.slice(-1))) {
+      console.log(display);
+      console.log(display.slice(-1));
+      console.log('last input a operator');
       setDisplay(`${display} ${icon}`);
+    } else {
+      console.log('reached end of if loops');
+      setDisplay(`${display}${icon}`);
     }
   };
 
