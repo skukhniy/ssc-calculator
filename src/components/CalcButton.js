@@ -24,21 +24,22 @@ export default function CalcButton({
     setDisplay(`${0}`);
   };
 
-  const signChangeFunc = (check) => {
-    let lastNum = check.at(-1);
+  const signChangeFunc = () => {
+    const checkArray = display.split(' ');
+    let lastNum = checkArray.at(-1);
     if (/\d/g.test(lastNum)) {
       if (/-/g.test(lastNum)) {
         lastNum = lastNum.replace('-', '');
       } else {
         lastNum = `-${lastNum}`;
       }
-      check[check.length - 1] = lastNum;
-      const cleanedString = check.join(' ');
+      checkArray[checkArray.length - 1] = lastNum;
+      const cleanedString = checkArray.join(' ');
       setDisplay(cleanedString);
     }
   };
 
-  const pieFunc = () => {
+  const sqrtFunc = () => {
     setDisplay(`${display}${icon}(`);
     if (display === '0') {
       setDisplay(`${icon}(`);
@@ -97,8 +98,8 @@ export default function CalcButton({
       signChangeFunc(check);
     } else if (type === 'exponent') {
       exponentFunc();
-    } else if (type === 'pie') {
-      pieFunc();
+    } else if (type === 'sqrt') {
+      sqrtFunc();
     } else if (type === 'number' && total !== 0 && !/\s/g.test(display)) {
       console.log('ANSWER REPLACED');
       setDisplay(`${icon}`);
@@ -123,7 +124,13 @@ export default function CalcButton({
 
   return (
     <div className={`calcBtn ${type}-color format-${icon}`} onClick={btnClick}>
-      <span>{icon}</span>
+      {icon === 'xy' ? (
+        <span>
+          x<sup>y</sup>
+        </span>
+      ) : (
+        <span>{icon}</span>
+      )}
     </div>
   );
 }

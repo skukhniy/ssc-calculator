@@ -30,7 +30,7 @@ function App() {
     ['-', 'operator'],
   ];
   const btnsRow5 = [
-    ['√', 'pie'],
+    ['√', 'sqrt'],
     [1, 'number'],
     [2, 'number'],
     [3, 'number'],

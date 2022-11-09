@@ -32,10 +32,14 @@ body {
   padding-bottom: 15px;
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
+  font-family: sans-serif;
+  font-weight: bold;
+  overflow: hidden;
   & .display {
     font-size: xx-large;
-    font-family: sans-serif;
-    font-weight: bold;
+  }
+  & .display-tiny {
+    font-size: x-large;
   }
 }
 
@@ -54,7 +58,6 @@ body {
   width: 80px;
   height: 60px;
   border: 0.5px solid black;
-  background-color: gray;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -67,25 +70,34 @@ body {
 .operator-color,
 .equals-color {
   background-color: rgb(204, 132, 0);
+  &:hover {
+    background-color: rgb(224, 160, 41);
+  }
 }
 
 .parenthesis-color,
 .clear-last-color,
 .clear-color,
-.pie-color,
+.sqrt-color,
 .percentage-color,
 .exponent-color,
 .factorial-color,
 .sign-change-color {
   background-color: rgb(71, 71, 71);
+  &:hover {
+    background-color: rgb(99, 98, 98);
+  }
 }
 
 .number-color,
 .decimal-color {
   background-color: gray;
+  &:hover {
+    background-color: rgb(165, 165, 165);
+  }
 }
 .format-0 {
-  width: 160px;
+  width: 161px;
 }
 .sign-change-color {
   border-bottom-left-radius: 30px;
