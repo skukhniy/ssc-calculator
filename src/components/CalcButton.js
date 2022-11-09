@@ -80,7 +80,7 @@ export default function CalcButton({
   };
 
   return (
-    <div className="calcBtn" onClick={btnClick}>
+    <div className={`calcBtn ${type}-color format-${icon}`} onClick={btnClick}>
       <span>{icon}</span>
     </div>
   );

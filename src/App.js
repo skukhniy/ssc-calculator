@@ -10,34 +10,39 @@ function App() {
   const btnsRow1 = [
     ['(', 'parenthesis'],
     [')', 'parenthesis'],
-    ['%', 'percentage'],
+    ['C', 'clear'],
     ['AC', 'clear'],
+    ['/', 'operator'],
   ];
-  const btnsRow2 = [
+
+  const btnsRow3 = [
+    ['%', 'percentage'],
     [7, 'number'],
     [8, 'number'],
     [9, 'number'],
-    ['/', 'operator'],
-  ];
-  const btnsRow3 = [
-    [4, 'number'],
-    [5, 'number'],
-    [6, 'number'],
     ['x', 'operator'],
   ];
   const btnsRow4 = [
-    [1, 'number'],
-    [2, 'number'],
-    [3, 'number'],
+    ['xy', 'exponent'],
+    [4, 'number'],
+    [5, 'number'],
+    [6, 'number'],
     ['-', 'operator'],
   ];
   const btnsRow5 = [
+    ['√', 'pie'],
+    [1, 'number'],
+    [2, 'number'],
+    [3, 'number'],
+    ['+', 'operator'],
+  ];
+  const btnsRow6 = [
+    ['+/-', 'sign-change'],
     [0, 'number'],
     ['.', 'decimal'],
     ['=', 'equals'],
-    ['+', 'operator'],
   ];
-  const btnRows = [btnsRow1, btnsRow2, btnsRow3, btnsRow4, btnsRow5];
+  const btnRows = [btnsRow1, btnsRow3, btnsRow4, btnsRow5, btnsRow6];
   return (
     <div className="App">
       <div className="CalcContainer">
