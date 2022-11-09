@@ -10,9 +10,9 @@ function App() {
   const btnsRow1 = [
     ['(', 'parenthesis'],
     [')', 'parenthesis'],
-    ['C', 'clear'],
+    ['C', 'clear-last'],
     ['AC', 'clear'],
-    ['/', 'operator'],
+    ['÷', 'operator'],
   ];
 
   const btnsRow3 = [

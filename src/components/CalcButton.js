@@ -24,9 +24,13 @@ export default function CalcButton({
     setDisplay(`${0}`);
   };
 
+  // throws the current equation on display into the mathjs evaulate func
   const equalsFunc = () => {
     console.log(display);
-    const evaluated = evaluate(display.replaceAll('x', '*'));
+    // temporarily replaces values that cause issues in the evaulate function
+    let cleanedString = display.replaceAll('x', '*');
+    cleanedString = cleanedString.replaceAll('÷', '/');
+    const evaluated = evaluate(cleanedString);
     setDisplay(`${evaluated}`);
     setTotal(evaluated);
   };
@@ -34,6 +38,7 @@ export default function CalcButton({
   const btnClick = () => {
     console.log('btnclick');
     console.log(type === 'decimal');
+    const check = display.split(' ');
     // execute operator function
     if (type === 'operator') {
       setDisplay(`${display} ${icon}`);
@@ -41,21 +46,35 @@ export default function CalcButton({
     } else if (type === 'clear') {
       console.log('Clear button pressed');
       clearFunc();
+    } else if (type === 'clear-last') {
+      let newDisplay = display.slice(0, -1);
+      if (newDisplay === '') {
+        newDisplay = '0';
+      }
+      setDisplay(newDisplay);
     } else if (type === 'equals') {
       console.log('EQUALS BUTTON PRESSED');
       equalsFunc();
       // if a number is entered after the equals button, it will replace the last answer
     } else if (type === 'decimal') {
-      const check = display.split(' ');
       console.log('decimal');
-      console.log(check);
-      console.log(check.at(-1));
-      console.log(check.at(-1).includes('.'));
       if (!check.at(-1).includes('.')) {
         setDisplay(`${display}${icon}`);
       }
+      // if the last number is negative, change to positive & vice versa
+    } else if (type === 'sign-change') {
+      let lastNum = check.at(-1);
+      if (/\d/g.test(lastNum)) {
+        if (/-/g.test(lastNum)) {
+          lastNum = lastNum.replace('-', '');
+        } else {
+          lastNum = `-${lastNum}`;
+        }
+        check[check.length - 1] = lastNum;
+        const cleanedString = check.join(' ');
+        setDisplay(cleanedString);
+      }
     } else if (type === 'number' && total !== 0 && !/\s/g.test(display)) {
-      console.log(total);
       console.log('ANSWER REPLACED');
       setDisplay(`${icon}`);
       setTotal(0);
@@ -68,9 +87,7 @@ export default function CalcButton({
       console.log(display.slice(-1));
       setDisplay(`${display}${icon}`);
       // check if last input was an operator
-    } else if (/[x+/-]/g.test(display.slice(-1))) {
-      console.log(display);
-      console.log(display.slice(-1));
+    } else if (/[x+÷-]/g.test(display.slice(-1))) {
       console.log('last input a operator');
       setDisplay(`${display} ${icon}`);
       // make sure you cant add two decimal points in one number
