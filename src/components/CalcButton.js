@@ -38,6 +38,19 @@ export default function CalcButton({
     }
   };
 
+  const pieFunc = () => {
+    setDisplay(`${display}${icon}(`);
+    if (display === '0') {
+      setDisplay(`${icon}(`);
+    }
+  };
+
+  const exponentFunc = () => {
+    if (/\d/g.test(display.slice(-1))) {
+      setDisplay(`${display}^`);
+    }
+  };
+
   // throws the current equation on display into the mathjs evaulate func
   const equalsFunc = () => {
     console.log(display);
@@ -46,6 +59,7 @@ export default function CalcButton({
       // temporarily replaces values that cause issues in the evaulate function
       let cleanedString = display.replaceAll('x', '*');
       cleanedString = cleanedString.replaceAll('÷', '/');
+      cleanedString = cleanedString.replaceAll('√', 'sqrt');
       const evaluated = evaluate(cleanedString);
       setDisplay(`${evaluated}`);
       setTotal(evaluated);
@@ -82,9 +96,9 @@ export default function CalcButton({
     } else if (type === 'sign-change') {
       signChangeFunc(check);
     } else if (type === 'exponent') {
-      if (/\d/g.test(display.slice(-1))) {
-        setDisplay(`${display}^`);
-      }
+      exponentFunc();
+    } else if (type === 'pie') {
+      pieFunc();
     } else if (type === 'number' && total !== 0 && !/\s/g.test(display)) {
       console.log('ANSWER REPLACED');
       setDisplay(`${icon}`);
