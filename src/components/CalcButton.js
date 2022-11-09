@@ -24,20 +24,37 @@ export default function CalcButton({
     setDisplay(`${0}`);
   };
 
+  const signChangeFunc = (check) => {
+    let lastNum = check.at(-1);
+    if (/\d/g.test(lastNum)) {
+      if (/-/g.test(lastNum)) {
+        lastNum = lastNum.replace('-', '');
+      } else {
+        lastNum = `-${lastNum}`;
+      }
+      check[check.length - 1] = lastNum;
+      const cleanedString = check.join(' ');
+      setDisplay(cleanedString);
+    }
+  };
+
   // throws the current equation on display into the mathjs evaulate func
   const equalsFunc = () => {
     console.log(display);
-    // temporarily replaces values that cause issues in the evaulate function
-    let cleanedString = display.replaceAll('x', '*');
-    cleanedString = cleanedString.replaceAll('÷', '/');
-    const evaluated = evaluate(cleanedString);
-    setDisplay(`${evaluated}`);
-    setTotal(evaluated);
+
+    if (!/\^/g.test(display.slice(-1))) {
+      // temporarily replaces values that cause issues in the evaulate function
+      let cleanedString = display.replaceAll('x', '*');
+      cleanedString = cleanedString.replaceAll('÷', '/');
+      const evaluated = evaluate(cleanedString);
+      setDisplay(`${evaluated}`);
+      setTotal(evaluated);
+    }
   };
 
   const btnClick = () => {
     console.log('btnclick');
-    console.log(type === 'decimal');
+    console.log(display.slice(-1));
     const check = display.split(' ');
     // execute operator function
     if (type === 'operator') {
@@ -63,16 +80,10 @@ export default function CalcButton({
       }
       // if the last number is negative, change to positive & vice versa
     } else if (type === 'sign-change') {
-      let lastNum = check.at(-1);
-      if (/\d/g.test(lastNum)) {
-        if (/-/g.test(lastNum)) {
-          lastNum = lastNum.replace('-', '');
-        } else {
-          lastNum = `-${lastNum}`;
-        }
-        check[check.length - 1] = lastNum;
-        const cleanedString = check.join(' ');
-        setDisplay(cleanedString);
+      signChangeFunc(check);
+    } else if (type === 'exponent') {
+      if (/\d/g.test(display.slice(-1))) {
+        setDisplay(`${display}^`);
       }
     } else if (type === 'number' && total !== 0 && !/\s/g.test(display)) {
       console.log('ANSWER REPLACED');
