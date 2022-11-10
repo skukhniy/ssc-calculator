@@ -14,7 +14,6 @@ function App() {
     ['AC', 'clear'],
     ['÷', 'operator'],
   ];
-
   const btnsRow3 = [
     ['%', 'percentage'],
     [7, 'number'],

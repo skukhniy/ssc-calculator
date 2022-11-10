@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes, { number } from 'prop-types';
-import { e, evaluate } from 'mathjs';
+import PropTypes from 'prop-types';
+import { evaluate } from 'mathjs';
 
 export default function CalcButton({
   icon,
@@ -24,6 +24,15 @@ export default function CalcButton({
     setDisplay(`${0}`);
   };
 
+  const clearLast = () => {
+    let newDisplay = display.slice(0, -1);
+    if (newDisplay === '') {
+      newDisplay = '0';
+    }
+    setDisplay(newDisplay);
+  };
+
+  // regex to check whether the last full number was positive or negative, then switch
   const signChangeFunc = () => {
     const checkArray = display.split(' ');
     let lastNum = checkArray.at(-1);
@@ -41,12 +50,30 @@ export default function CalcButton({
 
   const sqrtFunc = () => {
     setDisplay(`${display}${icon}(`);
+    // makes sure that if the display only has 0, it is replaced by the sqrt func
     if (display === '0') {
       setDisplay(`${icon}(`);
     }
   };
 
+  const parenthesisFunc = () => {
+    const check = display.split(' ');
+    // logic check ensures that the user can't have dangling parenthesis ex: 8) + 23
+    if ((icon === ')' && check.at(-1).includes('(')) || icon === '(') {
+      setDisplay(`${display}${icon}`);
+    }
+  };
+
+  const decimalFunc = () => {
+    const check = display.split(' ');
+    // checks to make sure that there arent multiple decimals per number
+    if (!check.at(-1).includes('.')) {
+      setDisplay(`${display}${icon}`);
+    }
+  };
+
   const exponentFunc = () => {
+    // test to stop exponent from being added to a non digit char
     if (/\d/g.test(display.slice(-1))) {
       setDisplay(`${display}^`);
     }
@@ -54,76 +81,60 @@ export default function CalcButton({
 
   // throws the current equation on display into the mathjs evaulate func
   const equalsFunc = () => {
-    console.log(display);
-
     if (!/\^/g.test(display.slice(-1))) {
       // temporarily replaces values that cause issues in the evaulate function
       let cleanedString = display.replaceAll('x', '*');
       cleanedString = cleanedString.replaceAll('÷', '/');
       cleanedString = cleanedString.replaceAll('√', 'sqrt');
+      cleanedString = cleanedString.replaceAll('()', '');
+      // use mathjs library to evaluate the string
       const evaluated = evaluate(cleanedString);
       setDisplay(`${evaluated}`);
       setTotal(evaluated);
     }
   };
 
+  // Object which uses type names as keys, combined with corresponding function
+  const funcList = {
+    clear: clearFunc,
+    'clear-last': clearLast,
+    equals: equalsFunc,
+    parenthesis: parenthesisFunc,
+    decimal: decimalFunc,
+    'sign-change': signChangeFunc,
+    exponent: exponentFunc,
+    sqrt: sqrtFunc,
+  };
+
   const btnClick = () => {
-    console.log('btnclick');
-    console.log(display.slice(-1));
-    const check = display.split(' ');
-    // execute operator function
     if (type === 'operator') {
-      setDisplay(`${display} ${icon}`);
-      // if the display is only 0, replace with newly input icon
-    } else if (type === 'clear') {
-      console.log('Clear button pressed');
-      clearFunc();
-    } else if (type === 'clear-last') {
-      let newDisplay = display.slice(0, -1);
-      if (newDisplay === '') {
-        newDisplay = '0';
+      // check to stop two operators being side by side
+      if (!/[x+÷-]/g.test(display.slice(-1))) {
+        setDisplay(`${display} ${icon} `);
       }
-      setDisplay(newDisplay);
-    } else if (type === 'equals') {
-      console.log('EQUALS BUTTON PRESSED');
-      equalsFunc();
-      // if a number is entered after the equals button, it will replace the last answer
-    } else if (type === 'parenthesis') {
-      console.log((icon === ')' && check.at(-1).includes('(')) || icon === '(');
-      if ((icon === ')' && check.at(-1).includes('(')) || icon === '(') {
-        setDisplay(`${display}${icon}`);
-      }
-    } else if (type === 'decimal') {
-      console.log('decimal');
-      if (!check.at(-1).includes('.')) {
-        setDisplay(`${display}${icon}`);
-      }
-      // if the last number is negative, change to positive & vice versa
-    } else if (type === 'sign-change') {
-      signChangeFunc(check);
-    } else if (type === 'exponent') {
-      exponentFunc();
-    } else if (type === 'sqrt') {
-      sqrtFunc();
-    } else if (type === 'number' && total !== 0 && !/\s/g.test(display)) {
-      console.log('ANSWER REPLACED');
+    } else if (type in funcList) {
+      // loop through function List to execute the correct func
+      Object.keys(funcList).forEach((key) => {
+        if (key === type) {
+          funcList[key]();
+        }
+      });
+    } else if (
+      (type === 'number' && total !== 0 && !/\s/g.test(display)) ||
+      display === '0'
+    ) {
+      // if you press a number after getting an answer, the display will start with the new number
+      // or if the number on display is already 0, replace the 0 with the new number
       setDisplay(`${icon}`);
       setTotal(0);
-    } else if (display === '0') {
-      console.log('display === 0');
-      setDisplay(`${icon}`);
+    } else if (
+      /\d/g.test(display.slice(-1)) ||
+      /[x+÷-]/g.test(display.slice(-1))
+    ) {
       // check if the last input was a number, the add this number to the current display/total
-    } else if (/\d/g.test(display.slice(-1))) {
-      console.log(typeof number);
-      console.log(display.slice(-1));
-      setDisplay(`${display}${icon}`);
       // check if last input was an operator
-    } else if (/[x+÷-]/g.test(display.slice(-1))) {
-      console.log('last input a operator');
-      setDisplay(`${display} ${icon}`);
-      // make sure you cant add two decimal points in one number
+      setDisplay(`${display}${icon}`);
     } else {
-      console.log('else');
       setDisplay(`${display}${icon}`);
     }
   };
