@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/ssc-calculator/static/css/main.926d5881.css",
+    "main.js": "/ssc-calculator/static/js/main.753ad22c.js",
+    "index.html": "/ssc-calculator/index.html",
+    "main.926d5881.css.map": "/ssc-calculator/static/css/main.926d5881.css.map",
+    "main.753ad22c.js.map": "/ssc-calculator/static/js/main.753ad22c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.926d5881.css",
+    "static/js/main.753ad22c.js"
+  ]
+}
