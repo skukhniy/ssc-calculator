@@ -6,6 +6,7 @@ import OutputScn from './components/OutputScn';
 function App() {
   const [total, setTotal] = useState(0);
   const [display, setDisplay] = useState('0');
+  const [parenthesisCheck, setParenCheck] = useState(false);
 
   const btnsRow1 = [
     ['(', 'parenthesis'],
@@ -58,6 +59,8 @@ function App() {
                   total={total}
                   setTotal={setTotal}
                   setDisplay={setDisplay}
+                  parenthesisCheck={parenthesisCheck}
+                  setParenCheck={setParenCheck}
                 />
               ))}
             </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { evaluate } from 'mathjs';
+import { e, evaluate } from 'mathjs';
 
 export default function CalcButton({
   icon,
@@ -8,6 +8,8 @@ export default function CalcButton({
   total,
   display,
   setDisplay,
+  parenthesisCheck,
+  setParenCheck,
   type,
 }) {
   CalcButton.propTypes = {
@@ -16,14 +18,18 @@ export default function CalcButton({
     setTotal: PropTypes.func.isRequired,
     display: PropTypes.string.isRequired,
     setDisplay: PropTypes.func.isRequired,
+    parenthesisCheck: PropTypes.bool.isRequired,
+    setParenCheck: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired,
   };
 
+  // clear the whole display
   const clearFunc = () => {
     setTotal(0);
-    setDisplay(`${0}`);
+    setDisplay('0');
   };
 
+  // clear the last input
   const clearLast = () => {
     let newDisplay = display.slice(0, -1);
     if (newDisplay === '') {
@@ -32,6 +38,29 @@ export default function CalcButton({
     setDisplay(newDisplay);
   };
 
+  // handle number types:
+  const numberFunc = () => {
+    // if you press a number after getting an answer, the display will start with the new number
+    // or if the number on display is already 0, replace the 0 with the new number
+    if (
+      (type === 'number' && total !== 0 && !/\s/g.test(display)) ||
+      display === '0'
+    ) {
+      setDisplay(`${icon}`);
+      setTotal(0);
+    } else {
+      setDisplay(`${display}${icon}`);
+    }
+  };
+
+  const operatorFunc = () => {
+    if (type === 'operator' || type === 'percentage') {
+      // check to stop two operators being side by side
+      if (!/[x+÷-]/g.test(display.slice(-2))) {
+        setDisplay(`${display} ${icon} `);
+      }
+    }
+  };
   // regex to check whether the last full number was positive or negative, then switch
   const signChangeFunc = () => {
     const checkArray = display.split(' ');
@@ -48,19 +77,34 @@ export default function CalcButton({
     }
   };
 
+  const percentageFunc = () => {
+    setDisplay(`${display} ${icon} `);
+  };
+
   const sqrtFunc = () => {
-    setDisplay(`${display}${icon}(`);
     // makes sure that if the display only has 0, it is replaced by the sqrt func
     if (display === '0') {
       setDisplay(`${icon}(`);
+    } else {
+      setDisplay(`${display}${icon}(`);
     }
+    setParenCheck(true);
   };
 
   const parenthesisFunc = () => {
-    const check = display.split(' ');
     // logic check ensures that the user can't have dangling parenthesis ex: 8) + 23
-    if ((icon === ')' && check.at(-1).includes('(')) || icon === '(') {
+    if (icon === '(') {
+      if (display === '0') {
+        setDisplay(`${icon}`);
+      } else setDisplay(`${display}${icon}`);
+      setParenCheck(true);
+    } else if (
+      icon === ')' &&
+      parenthesisCheck &&
+      /\d/g.test(display.slice(-1))
+    ) {
       setDisplay(`${display}${icon}`);
+      setParenCheck(false);
     }
   };
 
@@ -104,39 +148,14 @@ export default function CalcButton({
     'sign-change': signChangeFunc,
     exponent: exponentFunc,
     sqrt: sqrtFunc,
+    number: numberFunc,
+    percentage: percentageFunc,
+    operator: operatorFunc,
   };
 
+  // grabs related function from the FuncList Object
   const btnClick = () => {
-    if (type === 'operator') {
-      // check to stop two operators being side by side
-      if (!/[x+÷-]/g.test(display.slice(-1))) {
-        setDisplay(`${display} ${icon} `);
-      }
-    } else if (type in funcList) {
-      // loop through function List to execute the correct func
-      Object.keys(funcList).forEach((key) => {
-        if (key === type) {
-          funcList[key]();
-        }
-      });
-    } else if (
-      (type === 'number' && total !== 0 && !/\s/g.test(display)) ||
-      display === '0'
-    ) {
-      // if you press a number after getting an answer, the display will start with the new number
-      // or if the number on display is already 0, replace the 0 with the new number
-      setDisplay(`${icon}`);
-      setTotal(0);
-    } else if (
-      /\d/g.test(display.slice(-1)) ||
-      /[x+÷-]/g.test(display.slice(-1))
-    ) {
-      // check if the last input was a number, the add this number to the current display/total
-      // check if last input was an operator
-      setDisplay(`${display}${icon}`);
-    } else {
-      setDisplay(`${display}${icon}`);
-    }
+    funcList[type]();
   };
 
   return (
